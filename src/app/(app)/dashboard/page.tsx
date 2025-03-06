@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-const page = () => {
+const DashboardPage = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isSwitchLoading, setIsSwitchLoading] = useState(false)
@@ -45,7 +45,7 @@ const page = () => {
     finally{
       setIsSwitchLoading(false);
     }
-  },[setValue, toast])
+  },[setValue])
 
   const fetchMessages = useCallback(async(refresh: boolean = false)=> {
     setIsLoading(true)
@@ -76,7 +76,7 @@ const page = () => {
     fetchMessages()
     fetchAcceptMessage()
     
-  }, [session, setValue, toast, fetchAcceptMessage, fetchMessages])
+  }, [session, setValue, fetchAcceptMessage, fetchMessages])
 
   //handle switch change
 
@@ -171,4 +171,4 @@ const page = () => {
   )
 }
 
-export default page
+export default DashboardPage
