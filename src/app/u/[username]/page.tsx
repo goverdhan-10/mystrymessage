@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { CardHeader, CardContent, Card } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -25,14 +24,10 @@ import { useParams } from 'next/navigation';
 import { messageSchema } from '@/schemas/messageSchema';
 import { toast } from 'sonner';
 
-const specialChar = '||';
 
-const parseStringMessages = (messageString: string): string[] => {
-  return messageString.split(specialChar);
-};
 
-const initialMessageString =
-  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+
+
 
 export default function SendMessage() {
   const params = useParams<{ username: string }>();
@@ -46,9 +41,6 @@ export default function SendMessage() {
 
   const messageContent = form.watch('content');
 
-  const handleMessageClick = (message: string) => {
-    form.setValue('content', message);
-  };
 
   const [isLoading, setIsLoading] = useState(false);
 

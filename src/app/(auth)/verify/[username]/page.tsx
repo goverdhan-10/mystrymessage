@@ -32,7 +32,7 @@ const VerifyAccount = () => {
             console.error('Error in verification of code', error);
             const axiosError = error as AxiosError<ApiResponse>;
             toast.error('Unexpected Error', {
-                description: 'Verification of code failed',
+                description: axiosError.response?.data.message ?? 'Verification of code failed',
             });
         }
     }
