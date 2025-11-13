@@ -5,6 +5,7 @@ import { User } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/options';
 
 export async function DELETE(
+  request: Request,
   { params }: { params: { messageid: string } }
 ) {
   const messageId = params.messageid;
