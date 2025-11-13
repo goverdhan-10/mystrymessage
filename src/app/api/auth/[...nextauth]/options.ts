@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
         identifier: { label: "Email/Username", type: "text" }, // Fixed field name
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials: Credentials): Promise<AuthUser | null> {
+      async authorize(credentials: any): Promise<any> {
         await dbConnect();
         try {
           // Validate credentials
@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
               { email: credentials.identifier },
               { username: credentials.identifier }
             ]
-          });
+          }) as any;
 
           if (!user) throw new Error("No user found");
           if (!user.isVerified) throw new Error("Account not verified");
