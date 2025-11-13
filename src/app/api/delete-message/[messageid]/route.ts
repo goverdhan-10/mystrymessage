@@ -6,12 +6,16 @@ import { authOptions } from '../../auth/[...nextauth]/options';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { messageid: string } }
+  { params }: { params: Promise<{ messageid: string }> }
 ) {
-  const messageId = params.messageid;
+  // Fix: Await the params promise to get the ID
+  const { messageid } = await params;
+  const messageId = messageid;
+
   await dbConnect();
   const session = await getServerSession(authOptions);
-  const _user: User = session?.user;
+  const _user: User = session?.user as User;
+
   if (!session || !_user) {
     return Response.json(
       { success: false, message: 'Not authenticated' },
