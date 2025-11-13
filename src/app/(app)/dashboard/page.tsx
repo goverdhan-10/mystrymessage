@@ -35,7 +35,7 @@ const DashboardPage = () => {
     setIsSwitchLoading(true)
     try {
       const response = await axios.get<ApiResponse>('/api/accept-messages');
-      setValue('acceptMessages', response.data.isAcceptingMessage)
+      setValue('acceptMessages', response.data.isAcceptingMessage || false)
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>
       toast.error('Error in 41',{
@@ -158,7 +158,7 @@ const DashboardPage = () => {
         {messages.length > 0 ? (
           messages.map((message) => (
             <MessageCard
-              key={message._id}
+              key={message._id as string}
               message={message}
               onMessageDelete={handleDeleteMessage}
             />
