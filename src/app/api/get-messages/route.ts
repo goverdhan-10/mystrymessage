@@ -30,9 +30,9 @@ export async function GET() {
         if(!user || user.length==0){
             return Response.json(
                 {
-                    success: false,
-                    message: "User not found"
-                },{status: 401}
+                    success: true,
+                    message: [],
+                },{status: 200}
             )
         }
 
