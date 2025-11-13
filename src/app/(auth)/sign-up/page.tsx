@@ -4,7 +4,7 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import {  useDebounceCallback} from 'usehooks-ts';
+import { useDebounceCallback } from 'usehooks-ts';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/schemas/signUpSchema';
@@ -23,7 +23,6 @@ const SignUpPage = () => {
   const debouncedUsername = useDebounceCallback(setUsername, 300);
   const router = useRouter();
 
-  // Zod implementation
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -61,11 +60,9 @@ const SignUpPage = () => {
       });
       router.replace(`/verify/${username}`);
     } catch (error) {
-      console.error('Error in signup of user', error);
       const axiosError = error as AxiosError<ApiResponse>;
-       
-      toast.error('SignUp failed', {
-        description: axiosError.response?.data.message,
+      toast.error('Sign Up Failed', {
+        description: axiosError.response?.data.message || "An unexpected error occurred. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
@@ -73,11 +70,11 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-slate-50 text-slate-800 p-4">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg border border-slate-200">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">Join Mystery Message</h1>
-          <p className="mb-4">Sign Up to start your anonymous adventure</p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-4">Join ShhBox</h1>
+          <p className="text-slate-600">Sign Up to start your anonymous feedback journey</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -86,9 +83,9 @@ const SignUpPage = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-slate-700">Username</FormLabel>
                   <FormControl>
-                    <>
+                    <div>
                       <Input
                         placeholder="username"
                         {...field}
@@ -96,20 +93,21 @@ const SignUpPage = () => {
                           field.onChange(e);
                           debouncedUsername(e.target.value);
                         }}
+                        className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
                       />
-                      {isCheckingUsername && <Loader2 className="animate-spin" />}
+                      {isCheckingUsername && <Loader2 className="animate-spin h-4 w-4 text-indigo-500 mt-2" />}
                       {!isCheckingUsername && usernameMessage && (
                         <p
-                          className={`text-sm ${
+                          className={`text-sm mt-2 ${
                             usernameMessage === 'Username available' ? 'text-green-500' : 'text-red-500'
                           }`}
                         >
                           {usernameMessage}
                         </p>
                       )}
-                    </>
+                    </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -118,14 +116,14 @@ const SignUpPage = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-slate-700">Email</FormLabel>
                   <FormControl>
-                    <>
-                      <Input placeholder="email" {...field} />
-                      <p className="text-muted text-gray-400 text-sm">We will send you a verification code</p>
-                    </>
+                    <div>
+                      <Input placeholder="email" {...field} className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" />
+                      <p className="text-sm text-slate-500 mt-1">We will send you a verification code</p>
+                    </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -134,30 +132,34 @@ const SignUpPage = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-slate-700">Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="password" {...field} />
+                    <Input type="password" placeholder="password" {...field} className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting}>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow-sm transition-all duration-200"
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Please Wait
                 </>
               ) : (
-                'SignUp'
+                'Sign Up'
               )}
             </Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
-          <p>
+        <div className="text-center mt-6">
+          <p className="text-slate-600">
             Already a member?{' '}
-            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+            <Link href="/sign-in" className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200">
               Sign in
             </Link>
           </p>

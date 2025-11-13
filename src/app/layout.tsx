@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -9,8 +8,8 @@ import ClientComponent from './ClientComponent';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'True Feedback',
-  description: 'Real feedback from real people.',
+  title: 'ShhBox | Anonymous Feedback',
+  description: 'Your secure platform for anonymous feedback and messages.',
 };
 
 interface RootLayoutProps {
@@ -19,7 +18,7 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" >
+    <html lang="en" className={`bg-slate-50 text-slate-800`}>
       <AuthProvider>
         <body className={inter.className}>
           <ClientComponent/>

@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signInSchema } from '@/schemas/signInSchema';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react'; // Added Loader2 for loading state
 
 export default function SignInForm() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function SignInForm() {
     },
   });
 
+  const { isSubmitting } = form.formState; // Get submitting state
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
@@ -39,31 +41,29 @@ export default function SignInForm() {
 
     if (result?.error) {
       if (result.error === 'CredentialsSignin') {
-        toast.error('Login Failed',{
-          description: 'Incorrect username or password',
+        toast.error('Login Failed', {
+          description: 'Incorrect username or password. Please check your credentials.',
         });
       } else {
-        toast('Error',{
-          
+        toast.error('Login Failed', { // Changed to error toast for consistency
           description: result.error,
         });
       }
     }
 
     if (result?.url) {
-      console.log("signed in successfully")
       router.push('/dashboard');
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-slate-50 text-slate-800 p-4"> {/* Consistent background and text color */}
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg border border-slate-200"> {/* Enhanced container styling */}
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Welcome Back to True Feedback
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-4"> {/* Updated text color and spacing */}
+            Welcome Back to ShhBox
           </h1>
-          <p className="mb-4">Sign in to continue your secret conversations</p>
+          <p className="text-slate-600">Sign in to manage your anonymous messages</p> {/* Updated text color and message */}
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -72,9 +72,9 @@ export default function SignInForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email/Username</FormLabel>
-                  <Input {...field} />
-                  <FormMessage />
+                  <FormLabel className="text-slate-700">Email/Username</FormLabel> {/* Label color */}
+                  <Input {...field} className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" /> {/* Input styling */}
+                  <FormMessage className="text-red-500" /> {/* Message color */}
                 </FormItem>
               )}
             />
@@ -83,19 +83,32 @@ export default function SignInForm() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" {...field} />
-                  <FormMessage />
+                  <FormLabel className="text-slate-700">Password</FormLabel> {/* Label color */}
+                  <Input type="password" {...field} className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" /> {/* Input styling */}
+                  <FormMessage className="text-red-500" /> {/* Message color */}
                 </FormItem>
               )}
             />
-            <Button className='w-full' type="submit">Sign In</Button>
+            <Button 
+              className='w-full px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-md shadow-sm transition-all duration-200' 
+              type="submit"
+              disabled={isSubmitting} // Disable button during submission
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing In...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
-          <p>
+        <div className="text-center mt-6"> {/* Increased top margin */}
+          <p className="text-slate-600">
             Not a member yet?{' '}
-            <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
+            <Link href="/sign-up" className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200"> {/* Link styling */}
               Sign up
             </Link>
           </p>
